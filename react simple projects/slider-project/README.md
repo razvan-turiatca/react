@@ -1,5 +1,5 @@
-# react-projects-7-slider
+# Slider project
 
-#### IN ACTION
+## Gif Demo
 
-[Gatsby-Airtable Project](https://gatsby-airtable-design-project.netlify.app/)
+![slider-project](assets/slider-project.gif)
