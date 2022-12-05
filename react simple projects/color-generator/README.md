@@ -1,3 +1,5 @@
-#### Values JS
+# Colors Generator
 
-[values.js](https://github.com/noeldelgado/values.js)
+## Gif Demo
+
+![color-generator](assets/color-generator.gif)
