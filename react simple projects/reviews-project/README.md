@@ -1,5 +1,5 @@
-# Reviews project
+# Accordion Project
 
 ## Gif Demo
 
-![reviews-project](assets/reviews_project.gif)
+![accordion-project](assets/accordion-project.gif)
