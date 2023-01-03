@@ -23,29 +23,35 @@ function App() {
     })
   }, [])
 
-  useEffect(() => {
-    axios.get('https://opentdb.com/api.php?amount=10').then((res) => {
-      setFlashcards(
-        res.data.results.map((item, index) => {
-          const answer = decodeString(item.correct_answer)
-          const options = [
-            ...item.incorrect_answers.map((a) => decodeString(a)),
-
-            answer,
-          ]
-          return {
-            id: `${index}-${Date.now()}`,
-            question: decodeString(item.question),
-            answer: answer,
-            options: options.sort(() => Math.random() - 0.5),
-          }
-        }),
-      )
-    })
-  }, [])
+  useEffect(() => {}, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    axios
+      .get('https://opentdb.com/api.php', {
+        params: {
+          amount: amountEl.current.value,
+          category: categoryEl.current.value,
+        },
+      })
+      .then((res) => {
+        setFlashcards(
+          res.data.results.map((item, index) => {
+            const answer = decodeString(item.correct_answer)
+            const options = [
+              ...item.incorrect_answers.map((a) => decodeString(a)),
+
+              answer,
+            ]
+            return {
+              id: `${index}-${Date.now()}`,
+              question: decodeString(item.question),
+              answer: answer,
+              options: options.sort(() => Math.random() - 0.5),
+            }
+          }),
+        )
+      })
   }
 
   return (
