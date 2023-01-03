@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { FlashcardList } from './FlashcardList'
 import './app.css'
 import axios from 'axios'
 
 function App() {
-  const [flashcards, setFlashcards] = useState(SAMPLE_FLASHCARDS)
+  const [flashcards, setFlashcards] = useState([])
+  const [categories, setCategories] = useState([])
+
+  const categoryEl = useRef()
+  const amountEl = useRef()
 
   // this function will decode the html encoded elements from the API
   const decodeString = (str) => {
@@ -12,15 +16,22 @@ function App() {
     textArea.innerHTML = str
     return textArea.value
   }
+
+  useEffect(() => {
+    axios.get('https://opentdb.com/api_category.php').then((res) => {
+      setCategories(res.data.trivia_categories)
+    })
+  }, [])
+
   useEffect(() => {
     axios.get('https://opentdb.com/api.php?amount=10').then((res) => {
       setFlashcards(
         res.data.results.map((item, index) => {
-          const answer = item.correct_answer
+          const answer = decodeString(item.correct_answer)
           const options = [
             ...item.incorrect_answers.map((a) => decodeString(a)),
 
-            decodeString(answer),
+            answer,
           ]
           return {
             id: `${index}-${Date.now()}`,
@@ -30,12 +41,45 @@ function App() {
           }
         }),
       )
-      console.log(res.data)
     })
   }, [])
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+  }
+
   return (
     <>
+      <form className="header" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="category">Category</label>
+          <select id="category" ref={categoryEl}>
+            {categories.map((category) => {
+              const { id, name } = category
+              return (
+                <option value={id} key={id}>
+                  {' '}
+                  {name}{' '}
+                </option>
+              )
+            })}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="amount">Number of questions</label>
+          <input
+            type="number"
+            id="amount"
+            min="1"
+            step="1"
+            defaultValue={10}
+            ref={amountEl}
+          />
+        </div>
+        <div className="form-group">
+          <button className="button">Generate</button>
+        </div>
+      </form>
       <div className="container">
         <FlashcardList flashcards={flashcards} />
       </div>
