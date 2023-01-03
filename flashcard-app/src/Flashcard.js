@@ -8,7 +8,7 @@ export const Flashcard = ({ id, question, answer, options }) => {
       onClick={() => setFlip(!flip)}
     >
       <div className="front">
-        <h3>question</h3>
+        <p>{question}</p>
         <div className="flashcard-option">
           {options.map((option, i) => {
             return (
